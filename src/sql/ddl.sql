@@ -1,13 +1,5 @@
-create database shop character set utf8mb4 collate utf8mb4_general_ci;
 
-CREATE USER 'shopuser'@'localhost' IDENTIFIED BY 'shoppass';
-CREATE USER 'shopuser'@'%' IDENTIFIED BY 'shoppass';
-
-GRANT ALL PRIVILEGES ON shop.* TO 'shopuser'@'localhost';
-GRANT ALL PRIVILEGES ON shop.* TO 'shopuser'@'%';
-
-use shop;
-
+drop table shop.purchase_order;
 create table shop.purchase_order (
   order_number varchar(50) not null primary key,
   version bigint,
@@ -24,6 +16,7 @@ create table shop.purchase_order (
   order_date datetime
 ) character set utf8mb4;
 
+drop table shop.order_line;
 create table shop.order_line (
   order_number varchar(50) not null,
   line_idx int not null,
@@ -35,11 +28,14 @@ create table shop.order_line (
 
 create index order_line_idx ON order_line (order_number, line_idx);
 
+drop table shop.category; 
 create table shop.category (
   category_id bigint not null primary key,
   name varchar(100)
 ) character set utf8mb4;
 
+
+drop table shop.product;
 create table shop.product (
   product_id varchar(50) not null primary key,
   name varchar(100),
@@ -47,12 +43,15 @@ create table shop.product (
   detail text
 ) character set utf8mb4;
 
+drop table shop.product_category;
 create table shop.product_category (
   product_id varchar(50) not null,
   category_id bigint not null,
   constraint primary key (product_id, category_id)
 ) character set utf8mb4;
 
+
+drop table shop.image;
 create table shop.image (
   image_id int not null auto_increment primary key,
   product_id varchar(50),
@@ -62,6 +61,7 @@ create table shop.image (
   upload_time datetime
 ) character set utf8mb4;
 
+drop table shop.member;
 create table shop.member (
   member_id varchar(50) not null primary key,
   name varchar(50),
@@ -70,23 +70,28 @@ create table shop.member (
   emails varchar(200)
 ) character set utf8mb4;
 
+
+drop table shop.member_authorities;
 create table shop.member_authorities (
   member_id varchar(50) not null,
   authority varchar(50) not null,
   primary key (member_id, authority)
 ) character set utf8mb4;
 
+drop table shop.article;
 create table shop.article (
   id int not null auto_increment primary key,
   title varchar(255)
 ) character set utf8mb4;
 
+drop table shop.article_content;
 create table shop.article_content (
   id int not null primary key,
   content varchar(255),
   content_type varchar(255)
 ) character set utf8mb4;
 
+drop table shop.evententry;
 create table shop.evententry (
   id int not null AUTO_INCREMENT PRIMARY KEY,
   `type` varchar(255),
@@ -95,6 +100,7 @@ create table shop.evententry (
   `timestamp` datetime
 ) character set utf8mb4;
 
+drop table shop.locks;
 create table shop.locks (
   `type` varchar(255),
   id varchar(255),
@@ -102,5 +108,6 @@ create table shop.locks (
   expiration_time datetime,
   primary key (`type`, id)
 ) character set utf8mb4;
+
 
 create unique index locks_idx ON shop.locks (lockid);
